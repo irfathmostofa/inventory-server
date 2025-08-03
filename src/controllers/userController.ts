@@ -1,14 +1,22 @@
 import { Request, Response } from "express";
 
-import { pool } from "../../config/db";
+import { pool } from "../config/db";
 
 export const registerCompany = async (req: Request, res: Response) => {
-  const { name,address,phone,email,logo,status,CREATED_BY,CREATION_DATE } = req.body;
+  const {
+    name,
+    address,
+    phone,
+    email,
+    logo,
+    status,
+    CREATED_BY,
+    CREATION_DATE,
+  } = req.body;
   try {
-
     const result = await pool.query(
       "INSERT INTO USERS (name,address,phone,email,logo,status,CREATED_BY,CREATION_DATE) VALUES ($1, $2, $3,$4,$5,$6,$7,$8) RETURNING *",
-      [name,address,phone,email,logo,status,CREATED_BY,CREATION_DATE]
+      [name, address, phone, email, logo, status, CREATED_BY, CREATION_DATE]
     );
     res.status(201).json({ user: result.rows[0] });
   } catch (error) {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import { pool } from "../../config/db";
-import { generateToken } from "../../utils/jwtHelper";
+import { pool } from "../config/db";
+import { generateToken } from "../utils/jwtHelper";
 
 // Register User
 export const registerUser = async (req: Request, res: Response) => {
@@ -42,7 +42,7 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   const { PHONE, PASSWORD } = req.body;
   try {
-    const result = await pool.query("SELECT * FROM USERS WHERE PHONE = $1", [
+    const result = await pool.query("SELECT * FROM USERS WHERE phone = $1", [
       PHONE,
     ]);
     const user = result.rows[0];
