@@ -5,26 +5,45 @@ import { generateToken } from "../../utils/jwtHelper";
 
 // Register User
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const {
+    company_id,
+    name,
+    phone,
+    email,
+    password,
+    role,
+    status,
+    CREATED_BY,
+    CREATION_DATE,
+  } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
-      "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email",
-      [name, email, hashedPassword]
+      "INSERT INTO USERS (company_id,name,phone,email,password,role,status,CREATED_BY,CREATION_DATE) VALUES ($1, $2, $3,$4,$5) RETURNING *",
+      [
+        company_id,
+        name,
+        phone,
+        email,
+        hashedPassword,
+        role,
+        status,
+        CREATED_BY,
+        CREATION_DATE,
+      ]
     );
     res.status(201).json({ user: result.rows[0] });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Registration failed" });
+    res.status(500).json({ message: error });
   }
 };
 
 // Login User
 export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { PHONE, PASSWORD } = req.body;
   try {
-    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
+    const result = await pool.query("SELECT * FROM USERS WHERE PHONE = $1", [
+      PHONE,
     ]);
     const user = result.rows[0];
 
@@ -32,7 +51,7 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(PASSWORD, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }

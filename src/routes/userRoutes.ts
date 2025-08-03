@@ -6,6 +6,8 @@ import {
 
 const router = express.Router();
 
+// @swagger
+
 router.post("/get-all-user", getAllUsersController);
 router.post("/get-all-user-by-id", getUserByIdController);
 

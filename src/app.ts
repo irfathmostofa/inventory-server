@@ -1,10 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes";
-import authRoutes from './routes/authRoutes';
+import authRoutes from "./routes/authRoutes";
 import { logger } from "./middleware/logger";
 import { pool } from "./config/db";
-
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger";
 dotenv.config();
 
 const app = express();
@@ -12,10 +13,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(logger);
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes
 app.use("/users", userRoutes);
-app.use('/auth', authRoutes);
+app.use("/auth", authRoutes);
 
 // Database Connection
 pool
@@ -26,4 +27,5 @@ pool
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Swagger Docs at http://localhost:${PORT}/api-docs`);
 });
