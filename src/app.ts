@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes";
 import authRoutes from "./routes/authRoutes";
 import setupRoutes from "./routes/setupRoutes";
+import productRoutes from "./routes/ProductRoutes";
 import { logger } from "./middleware/logger";
 import { pool } from "./config/db";
 import swaggerUi from "swagger-ui-express";
@@ -20,6 +21,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/setup", setupRoutes);
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/product", productRoutes);
 
 // Database Connection
 
